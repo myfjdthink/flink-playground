@@ -26,23 +26,6 @@ services:
       - jobmanager:jobmanager
     environment:
       - JOB_MANAGER_RPC_ADDRESS=jobmanager
-  sql-client:
-    image: pyflink/pyflink:1.16.0-scala_2.12
-    build: ./flink_client
-    container_name: sql-client
-    links:
-      - jobmanager
-    depends_on:
-      - jobmanager
-      - taskmanager
-    environment:
-#      - ENABLE_BUILT_IN_PLUGINS=flink-gs-fs-hadoop-1.15.2.jar
-      - |
-        FLINK_PROPERTIES=
-        jobmanager.rpc.address: jobmanager
-        rest.address: jobmanager
-    volumes:
-      - ./flink_client/job:/opt/sql-client/job/
   zookeeper:
     image: confluentinc/cp-zookeeper:7.2.2
     container_name: zookeeper

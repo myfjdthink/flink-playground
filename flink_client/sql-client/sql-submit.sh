@@ -1,6 +1,6 @@
 #!/bin/bash
-export HADOOP_HOME=/opt/hadoop
-export HADOOP_CLASSPATH=`$HADOOP_HOME/bin/hadoop classpath`
+#export HADOOP_HOME=/opt/hadoop
+#export HADOOP_CLASSPATH=`$HADOOP_HOME/bin/hadoop classpath`
 
 
 if [ -z $1 ]
