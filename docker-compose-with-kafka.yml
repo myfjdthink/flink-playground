@@ -1,0 +1,86 @@
+version: '3.9'
+
+services:
+  jobmanager:
+    build: ./flink_client
+    image: pyflink/pyflink:1.16.0-scala_2.12
+    hostname: "jobmanager"
+    expose:
+      - "6123"
+    ports:
+      - "8081:8081"
+    command: jobmanager
+    environment:
+      - JOB_MANAGER_RPC_ADDRESS=jobmanager
+    volumes:
+      - ./flink_client/job:/opt/sql-client/job/
+  taskmanager:
+    image: pyflink/pyflink:1.16.0-scala_2.12
+    expose:
+      - "6121"
+      - "6122"
+    depends_on:
+      - jobmanager
+    command: taskmanager
+    links:
+      - jobmanager:jobmanager
+    environment:
+      - JOB_MANAGER_RPC_ADDRESS=jobmanager
+  sql-client:
+    image: pyflink/pyflink:1.16.0-scala_2.12
+    build: ./flink_client
+    container_name: sql-client
+    links:
+      - jobmanager
+    depends_on:
+      - jobmanager
+      - taskmanager
+    environment:
+#      - ENABLE_BUILT_IN_PLUGINS=flink-gs-fs-hadoop-1.15.2.jar
+      - |
+        FLINK_PROPERTIES=
+        jobmanager.rpc.address: jobmanager
+        rest.address: jobmanager
+    volumes:
+      - ./flink_client/job:/opt/sql-client/job/
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.2.2
+    container_name: zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+  broker:
+    image: confluentinc/cp-kafka:7.2.2
+    container_name: broker
+    ports:
+      # To learn about configuring Kafka for access across networks see
+      # https://www.confluent.io/blog/kafka-client-cannot-connect-to-broker-on-aws-on-docker-etc/
+      - "9092:9092"
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_INTERNAL:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://broker:9092,PLAINTEXT_INTERNAL://broker:29092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_LOG_RETENTION_HOURS: 24
+  kafka-ui:
+    image: provectuslabs/kafka-ui
+    container_name: kafka-ui
+    ports:
+      - "8086:8080"
+    restart: always
+    depends_on:
+      - broker
+    environment:
+      - KAFKA_CLUSTERS_0_NAME=local
+      - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=broker:9092
+      - KAFKA_CLUSTERS_0_ZOOKEEPER=zookeeper:2181
+  
+networks:
+  ndsnet:
+    driver: bridge
+    name: "fp"
