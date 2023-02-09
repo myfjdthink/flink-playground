@@ -45,4 +45,6 @@ AND t.update_time BETWEEN o.order_time - INTERVAL '1' MINUTE AND o.order_time;
 -- AND t.update_time BETWEEN o.order_time - INTERVAL '1' MINUTE AND o.order_time
 -- WHERE o.item_id > 1 AND o.item_id < 4;
 
+-- 可以考虑对结果在进一步做 group by 去重，只选最新值
+
 
