@@ -65,14 +65,18 @@ CREATE TABLE t_item (
 1. order_join_price_temporal_join.sql
 将 price 变成一个 view，只存储最新 price，方便 order join 币价
 
-优点：内存消耗少
-缺点：币价迟到，会导致 order price 计算有误差
+
+- 优点：内存消耗少
+- 缺点：币价迟到，会导致 order price 计算有误差
+
 
 2. order_join_price_window_join.sql
 每个 order 都对应一个 price window，找到最时间最近的价格即可
 
-优点：大部分情况下，可以拿到最接近 order time 的 price
-缺点：order 迟到或者 price 迟到，window 数据不存在了，数据会被忽略
+
+- 优点：大部分情况下，可以拿到最接近 order time 的 price
+- 缺点：order 迟到或者 price 迟到，window 数据不存在了，数据会被忽略
+
 
 3. order_join_price_version_table.sql
 效果和方案1相同，不一样的实现方式  

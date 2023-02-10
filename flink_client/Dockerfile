@@ -2,7 +2,7 @@
 # Build SQL Playground Image
 ###############################################################################
 
-FROM apache/flink:1.16.0-scala_2.12
+FROM apache/flink:1.16-scala_2.12
 ARG FLINK_VERSION=1.16.0
 
 

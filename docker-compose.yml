@@ -3,7 +3,7 @@ version: '3.9'
 services:
   jobmanager:
     build: ./flink_client
-    image: pyflink/pyflink:1.16.0-scala_2.12
+    image: apache/flink:1.16-scala_2.12
     hostname: "jobmanager"
     expose:
       - "6123"
@@ -15,7 +15,7 @@ services:
     volumes:
       - ./flink_client/job:/opt/sql-client/job/
   taskmanager:
-    image: pyflink/pyflink:1.16.0-scala_2.12
+    image: apache/flink:1.16-scala_2.12
     expose:
       - "6121"
       - "6122"
