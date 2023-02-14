@@ -43,7 +43,7 @@ CREATE TABLE sink_table (
     'table-name' = 'public.item_price'
 );
 
-SET 'pipeline.name' = 'datagen_to_kafka';
+SET 'pipeline.name' = 'datagen_to_pgsql_unique';
 SET 'execution.checkpointing.interval' = '10s';
 
 -- submit job

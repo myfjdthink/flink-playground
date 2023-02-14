@@ -20,44 +20,13 @@ CREATE TABLE t_item_price_version (
     PRIMARY KEY(item_id) NOT ENFORCED,      -- (1) 定义主键约束
     WATERMARK FOR update_time AS update_time   -- (2) 通过 watermark 定义事件时间
 ) WITH (
-  'connector' = 'datagen',
-  'rows-per-second' = '2',
-  'fields.item_id.min'='1',
-  'fields.item_id.max'='5',
-  'fields.price.min'='1',
-  'fields.price.max'='10000'
+  'connector' = 'jdbc',
+  'url' = 'jdbc:postgresql://pgsql:5432/postgres',
+  'username' = 'klg',
+  'password' = '123456',
+  'table-name' = 'public.item_price_history'
 );
 
-
--- 临时表 join
-
--- 先定义时态表
-CREATE VIEW versioned_price AS
-SELECT item_id, price, update_time            -- (1) `currency_time` 保留了事件时间
-  FROM (
-      SELECT *,
-      ROW_NUMBER() OVER (PARTITION BY item_id  -- (2) `item_id` 是去重 query 的 unique key，可以作为主键
-         ORDER BY update_time DESC) AS rowNum
-      FROM t_item )
-WHERE rowNum = 10;
-
-
--- join
--- 注意，如果 order 里的 item 没有 price，将会被过滤，
-SELECT
-    o.*,
-    t.price
-FROM t_order o, versioned_price t
-WHERE o.item_id = t.item_id
-AND o.item_id > 3 AND o.item_id < 7 ;
-
-SET 'pipeline.name' = 'datagen_to_kafka';
-SET 'execution.checkpointing.interval' = '10s';
-
--- left join
-SELECT
-    o.*,
-    t.price
-FROM t_order o LEFT JOIN versioned_price t on o.item_id = t.item_id
-WHERE o.item_id > 3 AND o.item_id < 7;
-
+-- 报错，走不通
+-- [ERROR] Could not execute SQL statement. Reason:
+-- org.apache.flink.table.api.ValidationException: Table 'JDBC:PostgreSQL' declares metadata columns, but the underlying DynamicTableSource doesn't implement the SupportsReadingMetadata interface. Therefore, metadata cannot be read from the given source

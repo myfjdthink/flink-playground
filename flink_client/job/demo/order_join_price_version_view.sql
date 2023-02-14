@@ -2,7 +2,7 @@ CREATE TABLE t_order (
     order_number BIGINT,
     item_id      BIGINT,
     order_time   TIMESTAMP(3),
-    WATERMARK FOR order_time AS order_time
+    proctime AS PROCTIME()
 ) WITH (
   'connector' = 'datagen',
   'rows-per-second' = '5',
@@ -10,7 +10,7 @@ CREATE TABLE t_order (
   'fields.order_number.start'='1',
   'fields.order_number.end'='1000000',
   'fields.item_id.min'='1',
-  'fields.item_id.max'='10'
+  'fields.item_id.max'='8'
 );
 
 CREATE TABLE t_item (
@@ -29,7 +29,7 @@ CREATE TABLE t_item (
 
 -- 临时表 join
 
--- 先定义时态表
+-- 先定义时态 View
 CREATE VIEW versioned_price AS
 SELECT item_id, price
   FROM (
@@ -51,9 +51,19 @@ AND o.item_id > 3 AND o.item_id < 7 ;
 
 
 -- left join
+-- 当币价更新是，已经处理过的 t_order 会被重复处理
 SELECT
     o.*,
     t.price
-FROM t_order o LEFT JOIN versioned_price t on o.item_id = t.item_id
-WHERE o.item_id > 3 AND o.item_id < 7;
+FROM t_order o LEFT JOIN versioned_price t on o.item_id = t.item_id;
+
+-- lookup join
+-- view 还不支持作为 lookup join 的 source
+-- https://nightlies.apache.org/flink/flink-docs-master/zh/docs/dev/table/concepts/versioned_tables/#%E5%A3%B0%E6%98%8E%E7%89%88%E6%9C%AC%E8%A7%86%E5%9B%BE
+SELECT
+    o.*,
+    t.price
+FROM t_order o
+LEFT JOIN versioned_price FOR SYSTEM_TIME AS OF o.proctime AS t
+on o.item_id = t.item_id;
 

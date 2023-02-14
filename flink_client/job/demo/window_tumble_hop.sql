@@ -14,6 +14,7 @@ CREATE TABLE t_order (
 );
 
 
+
 SELECT
     TUMBLE_START(order_time, INTERVAL '5' SECOND) AS window_start,
     TUMBLE_END(order_time, INTERVAL '5' SECOND) AS window_end,
@@ -37,10 +38,10 @@ CREATE TABLE t_order2 (
 );
 
 SELECT
-    HOP_START(order_time, INTERVAL '1' SECOND, INTERVAL '5' SECOND) AS window_start,
-    HOP_END(order_time, INTERVAL '1' SECOND, INTERVAL '5' SECOND) AS window_end,
+    HOP_START(order_time, INTERVAL '4' SECOND, INTERVAL '5' SECOND) AS window_start,
+    HOP_END(order_time, INTERVAL '4' SECOND, INTERVAL '5' SECOND) AS window_end,
     SUM(1) as cnt
-FROM t_order2 GROUP BY HOP(order_time, INTERVAL '1' SECOND, INTERVAL '5' SECOND);
+FROM t_order2 GROUP BY HOP(order_time, INTERVAL '4' SECOND, INTERVAL '5' SECOND);
 
 
 

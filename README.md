@@ -38,8 +38,9 @@ docker-compose exec jobmanager bash /opt/sql-client/sql-client.sh
 
 ```shell
 docker-compose exec jobmanager bash /opt/sql-client/sql-submit.sh demo/xxx.sql
-docker-compose exec jobmanager bash /opt/sql-client/sql-submit.sh demo/datagen_to_kafka.sql
+docker-compose exec jobmanager bash /opt/sql-client/sql-submit.sh demo/datagen_to_kafka_append.sql
 docker-compose exec jobmanager bash /opt/sql-client/sql-submit.sh demo/datagen_to_pgsql.sql
+docker-compose exec jobmanager bash /opt/sql-client/sql-submit.sh demo/datagen_to_pgsql_unique.sql
 ```
 就可以将 sql job 提交到 flink。
 

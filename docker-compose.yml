@@ -42,6 +42,7 @@ services:
     container_name: pgsql
     ports:
       - "5432:5432"
+    command: ["postgres", "-c", "log_statement=all"]
     environment:
       POSTGRES_DB: foot
       POSTGRES_PASSWORD: 123456
