@@ -31,7 +31,7 @@ CREATE TABLE t_item (
 
 -- 先定义时态表
 CREATE VIEW versioned_price AS
-SELECT item_id, price, update_time            -- (1) `currency_time` 保留了事件时间
+SELECT item_id, price
   FROM (
       SELECT *,
       ROW_NUMBER() OVER (PARTITION BY item_id  -- (2) `item_id` 是去重 query 的 unique key，可以作为主键

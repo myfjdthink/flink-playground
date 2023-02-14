@@ -16,7 +16,7 @@ CREATE TABLE t_order (
 CREATE TABLE t_item_price_version (
     item_id BIGINT,
     price        DECIMAL(32,2),
-    update_time   TIMESTAMP(3) METADATA FROM 'value.source.timestamp' VIRTUAL,
+    update_time   TIMESTAMP(3),
     PRIMARY KEY(item_id) NOT ENFORCED,      -- (1) 定义主键约束
     WATERMARK FOR update_time AS update_time   -- (2) 通过 watermark 定义事件时间
 ) WITH (
