@@ -20,6 +20,7 @@ services:
         taskmanager.memory.jvm-metaspace.size: 1g
     volumes:
       - ./flink_client/job:/opt/sql-client/job/
+      - ./flink_cp/:/opt/flink_cp/
   taskmanager:
     image: apache/flink:1.16-scala_2.12
     expose:
@@ -30,6 +31,8 @@ services:
     command: taskmanager
     links:
       - jobmanager:jobmanager
+    volumes:
+      - ./flink_cp/:/opt/flink_cp/
     environment:
       - |
         FLINK_PROPERTIES=

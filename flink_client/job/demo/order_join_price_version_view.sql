@@ -17,7 +17,7 @@ CREATE TABLE t_item (
     item_id BIGINT,
     price        DECIMAL(32,2),
     update_time   TIMESTAMP(3),
-    WATERMARK FOR update_time AS update_time
+    WATERMARK FOR update_time AS update_time  -- 把 update_time 当做 event-time
 ) WITH (
   'connector' = 'datagen',
   'rows-per-second' = '2',
