@@ -37,7 +37,7 @@ SELECT item_id, price
       ROW_NUMBER() OVER (PARTITION BY item_id  -- (2) `item_id` 是去重 query 的 unique key，可以作为主键
          ORDER BY update_time DESC) AS rowNum
       FROM t_item )
-WHERE rowNum = 10;
+WHERE rowNum = 1;
 
 
 -- join

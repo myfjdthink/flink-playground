@@ -50,7 +50,7 @@ insert into blackhole_table SELECT
     o.order_time,
     avg(t.price) as price
 FROM t_order o
-LEFT JOIN t_item t ON o.item_id = t.item_id
+LEFT JOIN t_item t ON o.item_id = t.item_id  --LEFT JOIN 了一个 流表，还是会导致 OOM
 GROUP BY o.item_id, o.pad_string, o.order_time, TUMBLE(proctime, INTERVAL '20' SECOND);
 
 

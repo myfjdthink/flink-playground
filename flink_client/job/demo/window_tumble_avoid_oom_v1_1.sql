@@ -20,17 +20,17 @@ CREATE TABLE blackhole_table (
   'connector' = 'blackhole'
 );
 
-SET 'pipeline.name' = 'window_tumble_avoid_oom_2';
+SET 'pipeline.name' = 'window_tumble_avoid_oom_v1_1';
 SET 'execution.checkpointing.interval' = '20s';
 SET 'state.checkpoints.dir' = 'file:///opt/flink_cp';
 
 
 -- 加上 Window，过期的 Window stage 会自动清除
-insert into blackhole_table SELECT
+INSERT INTO blackhole_table SELECT
     item_id,
     pad_string,
     order_time
-FROM t_order GROUP BY item_id, pad_string, order_time, TUMBLE(proctime, INTERVAL '20' SECOND);
+FROM t_order GROUP BY item_id, pad_string, order_time, TUMBLE(proctime, INTERVAL '5' SECOND);
 
 
 

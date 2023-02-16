@@ -21,8 +21,8 @@ CREATE TABLE t_item (
 ) WITH (
   'connector' = 'jdbc',
   'url' = 'jdbc:postgresql://pgsql:5432/postgres',
---   'lookup.cache.max-rows' = '100',  -- https://nightlies.apache.org/flink/flink-docs-master/docs/connectors/table/jdbc/#lookup-cache
---   'lookup.cache.ttl' = '100000',  -- 毫秒
+  'lookup.cache.max-rows' = '100',  -- https://nightlies.apache.org/flink/flink-docs-master/docs/connectors/table/jdbc/#lookup-cache
+  'lookup.cache.ttl' = '100000',  -- 毫秒
   'username' = 'klg',
   'password' = '123456',
   'table-name' = 'public.item_price'

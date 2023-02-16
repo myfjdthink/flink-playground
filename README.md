@@ -42,6 +42,8 @@ docker-compose exec jobmanager bash /opt/sql-client/sql-submit.sh demo/datagen_t
 docker-compose exec jobmanager bash /opt/sql-client/sql-submit.sh demo/datagen_to_pgsql.sql
 docker-compose exec jobmanager bash /opt/sql-client/sql-submit.sh demo/datagen_to_pgsql_unique.sql
 docker-compose exec jobmanager bash /opt/sql-client/sql-submit.sh demo/window_tumble_avoid_oom.sql
+docker-compose exec jobmanager bash /opt/sql-client/sql-submit.sh demo/window_tumble_avoid_oom_v2.sql
+docker-compose exec jobmanager bash /opt/sql-client/sql-submit.sh demo/order_join_price_lookup_join.sql
 ```
 就可以将 sql job 提交到 flink。
 
