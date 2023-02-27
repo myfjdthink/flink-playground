@@ -47,6 +47,18 @@ docker-compose exec jobmanager bash /opt/sql-client/sql-submit.sh demo/order_joi
 ```
 就可以将 sql job 提交到 flink。
 
+## submit sql job with python udf
+调试模式
+```shell
+docker-compose exec jobmanager bash /opt/sql-client/sql-client-udf.sh basic/python_basic_udf.py
+```
+
+
+submit 模式
+```shell
+docker-compose exec jobmanager bash /opt/sql-client/sql-submit-udf.sh py_demo/upper_udf.sql basic/python_basic_udf.py
+```
+
 ## sql job demo
 
 ### order join price 系列
