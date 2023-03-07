@@ -50,14 +50,19 @@ docker-compose exec jobmanager bash /opt/sql-client/sql-submit.sh demo/order_joi
 ## submit sql job with python udf
 调试模式
 ```shell
-docker-compose exec jobmanager bash /opt/sql-client/sql-client-udf.sh basic/python_basic_udf.py
-```
+docker-compose exec jobmanager bash /opt/sql-client/sql-client-udf.sh basic/basic_udf.py
+docker-compose exec jobmanager bash /opt/sql-client/sql-client-udf.sh web3/eth.py
 
+docker-compose exec jobmanager bash /opt/flink/bin/sql-client.sh -pyfs /opt/sql-client/py_udf/web3/eth.py -pyreq /opt/sql-client/py_udf/web3/requirements.txt
+```
 
 submit 模式
 ```shell
-docker-compose exec jobmanager bash /opt/sql-client/sql-submit-udf.sh py_demo/upper_udf.sql basic/python_basic_udf.py
+docker-compose exec jobmanager bash /opt/sql-client/sql-submit-udf.sh py_demo/upper_udf.sql basic/basic_udf.py
 ```
+
+依赖 Python package
+目前测试下来 `-pyreq` 参数无效过，在 Docker 镜像中提前安装好 Python package 才可以
 
 ## sql job demo
 

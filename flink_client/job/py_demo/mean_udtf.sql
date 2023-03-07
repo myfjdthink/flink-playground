@@ -6,11 +6,13 @@ CREATE TABLE t_item (
 ) WITH (
   'connector' = 'datagen',
   'rows-per-second' = '10',
+  'fields.price.min'='1',
+  'fields.price.max'='100',
   'fields.item_id.min'='1',
-  'fields.item_id.max'='5',
+  'fields.item_id.max'='3',
   'fields.pad_string.length'='5'
 );
 
-CREATE FUNCTION upper_udf AS 'basic_udf.upper_udf' LANGUAGE PYTHON;
+CREATE FUNCTION mean_udf AS 'basic_udf.mean_udf' LANGUAGE PYTHON;
 
-select pad_string, upper_udf(pad_string) AS UPPPP from t_item;
+SELECT item_id, avg(price) as avg_price_origin, mean_udf(price) as avg_price FROM t_item group by item_id;

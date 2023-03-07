@@ -11,6 +11,6 @@ CREATE TABLE t_item (
   'fields.pad_string.length'='5'
 );
 
-CREATE FUNCTION upper_udf AS 'basic_udf.upper_udf' LANGUAGE PYTHON;
+CREATE FUNCTION split_string AS 'basic_udf.split_string' LANGUAGE PYTHON;
 
-select pad_string, upper_udf(pad_string) AS UPPPP from t_item;
+SELECT item_id, pad_string, word, length FROM t_item, LATERAL TABLE(split_string(pad_string)) as T(word, length);

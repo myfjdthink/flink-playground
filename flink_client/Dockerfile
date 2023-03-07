@@ -22,8 +22,10 @@ RUN set -ex; \
   ln -s /usr/local/bin/python3 /usr/local/bin/python && \
   ln -s /usr/local/bin/pip3 /usr/local/bin/pip && \
   apt-get clean && \
-  rm -rf /var/lib/apt/lists/* && \
-  python -m pip install --upgrade pip; \
+  rm -rf /var/lib/apt/lists/*
+
+
+RUN python -m pip install --upgrade pip; \
   pip install apache-flink==${FLINK_VERSION};
 
 # Download connector libraries
@@ -35,8 +37,13 @@ RUN wget -P /opt/flink/lib/ https://repo1.maven.org/maven2/org/postgresql/postgr
 
 RUN mkdir -p /opt/sql-client/
 RUN mkdir -p /opt/sql-client/lib
+
+RUN pip install eth_event==1.2.3;
+
 # Copy sql-client shell
 # COPY sql-client/ /opt/sql-client/
 ENV SQL_CLIENT_HOME /opt/sql-client/
+
+ADD log4j.properties /opt/flink/conf/log4j.properties
 
 CMD tail -f /dev/null
