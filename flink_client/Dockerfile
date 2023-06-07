@@ -26,7 +26,8 @@ RUN set -ex; \
 
 
 RUN python -m pip install --upgrade pip; \
-  pip install apache-flink==${FLINK_VERSION};
+  pip install apache-flink==${FLINK_VERSION}; \
+  pip install eth_event==1.2.3;
 
 # Download connector libraries
 RUN wget -P /opt/flink/lib/ https://repo.maven.apache.org/maven2/org/apache/flink/flink-json/${FLINK_VERSION}/flink-json-${FLINK_VERSION}.jar; \
@@ -38,7 +39,6 @@ RUN wget -P /opt/flink/lib/ https://repo1.maven.org/maven2/org/postgresql/postgr
 RUN mkdir -p /opt/sql-client/
 RUN mkdir -p /opt/sql-client/lib
 
-RUN pip install eth_event==1.2.3;
 
 # Copy sql-client shell
 # COPY sql-client/ /opt/sql-client/
