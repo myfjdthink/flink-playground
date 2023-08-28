@@ -36,4 +36,3 @@ select
     sum(tx_amount) as balance
 from TABLE(CUMULATE(TABLE transfers, DESCRIPTOR(proctime), INTERVAL '1' MINUTES, INTERVAL '5' MINUTES))
 group by collection, item_id;
-order by collection, item_id;

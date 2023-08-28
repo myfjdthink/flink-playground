@@ -41,4 +41,13 @@ services:
         jobmanager.rpc.address: jobmanager
         taskmanager.numberOfTaskSlots: 4
         taskmanager.memory.jvm-metaspace.size: 1g
-
+  pgsql:
+    image: postgres:15.1-alpine
+    container_name: pgsql
+    ports:
+      - "5432:5432"
+    command: ["postgres", "-c", "log_statement=all"]
+    environment:
+      POSTGRES_DB: foot
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_USER: klg
