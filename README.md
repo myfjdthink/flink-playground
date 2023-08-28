@@ -62,7 +62,7 @@ docker-compose exec jobmanager bash /opt/sql-client/sql-submit-udf.sh py_demo/up
 ```
 
 依赖 Python package
-目前测试下来 `-pyreq` 参数无效过，在 Docker 镜像中提前安装好 Python package 才可以
+目前测试下来 `-pyreq` 参数无效过，在 Docker 镜像中提前安装好 Python package 才可以，具体参考 flink_client/job/py_demo/eth_udf.sql
 
 ## sql job demo
 

@@ -1,0 +1,44 @@
+version: '3.9'
+
+services:
+  jobmanager:
+    build: ./flink_client
+    image: flink_local
+    hostname: "jobmanager"
+    expose:
+      - "6123"
+    ports:
+      - "8081:8081"
+    command: jobmanager
+    environment:
+      - |
+        FLINK_PROPERTIES=
+        jobmanager.rpc.address: jobmanager
+        jobmanager.memory.process.size: 1g
+        jobmanager.memory.jvm-metaspace.size: 256m
+        taskmanager.numberOfTaskSlots: 4
+        taskmanager.memory.jvm-metaspace.size: 1g
+    volumes:
+      - ./flink_client/:/opt/sql-client/
+      - ./flink_cp/:/opt/flink_cp/
+  taskmanager:
+    build: ./flink_client
+    image: flink_local
+    expose:
+      - "6121"
+      - "6122"
+    depends_on:
+      - jobmanager
+    command: taskmanager
+    links:
+      - jobmanager:jobmanager
+    volumes:
+      - ./flink_cp/:/opt/flink_cp/
+    environment:
+      - |
+        FLINK_PROPERTIES=
+        taskmanager.memory.process.size: 5g
+        jobmanager.rpc.address: jobmanager
+        taskmanager.numberOfTaskSlots: 4
+        taskmanager.memory.jvm-metaspace.size: 1g
+
